@@ -1,0 +1,10 @@
+hmm	bitscore
+Proteorhodopsin	26
+Heliorhodopsin	32
+Xantharhodopsin	26
+Heliorhodopsin_Pfam	26.7
+GpcrRhopsn4	23.7
+Htr2	25
+ASRT	25
+Bac_rhodopsin	23.5
+7tm_1	30.50
