@@ -11,7 +11,8 @@ usage: RhoGenie.py [-h] [-bin_dir BIN_DIR] [-bin_ext BIN_EXT] [-outdir OUTDIR]
                    
                    -out Basename for output files (optional)
                    
-                   --makeplots (y/n) would you like R plots to be generate automatically? (not recommended for servers)
+                   --makeplots (y/n) would you like R plots to be generate automatically? (not recommended for servers where 
+                   you do not have super user (sudo) permissions.
                    
                    -hmm_dir Directory of HMMs (i.e. the 'HMMs' directory that comes with this tool)
                    
