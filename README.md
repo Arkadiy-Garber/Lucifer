@@ -1,6 +1,6 @@
 # RhoGenie
 
-usage: GeoGenie.py [-h] [-bin_dir BIN_DIR] [-bin_ext BIN_EXT] [-outdir OUTDIR]
+usage: RhoGenie.py [-h] [-bin_dir BIN_DIR] [-bin_ext BIN_EXT] [-outdir OUTDIR]
                    [-out OUT] [--makeplots MAKEPLOTS] [-hmm_dir HMM_DIR] [--R R]
                    
                    -bin_dir Directory of genomes or assemblies. Must be in FASTA amino acid format.
@@ -18,3 +18,5 @@ usage: GeoGenie.py [-h] [-bin_dir BIN_DIR] [-bin_ext BIN_EXT] [-outdir OUTDIR]
                    --R Directory of R scripts (i.e. the "rscripts" directory that comes with this tool). Not requried if R       
                    plots are not being generated automatically
                    
+
+Quick note to amateurs: If the program is not in your path, then your console should be in the same directory as the RhoGenie.py executable, and you must run it as "./RhoGenie.py -bin_dir..."
