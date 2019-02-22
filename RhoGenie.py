@@ -473,14 +473,11 @@ outHeat = open("%s/%s.heatmap.csv" % (args.outdir, args.out), "w")
 outHeat.write("X" + ',')
 for i in sorted(Dict.keys()):
     if (not re.match(r'#', i) and i != "bin"):
-        try:
-            outHeat.write(bitDict[i]["desc"] + ",")
-        except TypeError:
-            outHeat.write("something went wrong here..." + ",")
+        outHeat.write(i + ",")
 outHeat.write("\n")
 
 for i in cats:
-    outHeat.write(i + ",")
+    outHeat.write(bitDict[i]["desc"] + ",")
     for j in sorted(Dict.keys()):
         if (not re.match(r'#', j) and j != "bin"):
             outHeat.write(str((len(Dict[j][i]) / int(normDict[j])) * float(100)) + ",")
