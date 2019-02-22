@@ -8,3 +8,11 @@ Htr2	25
 ASRT	25
 Bac_rhodopsin	23.5
 7tm_1	30.50
+Photo_RC	21.9
+PsaA_PsaB	23.1
+PSII	25
+PCP	22.3
+Chloroa_b-bind	22.3
+Bac_chlorC	25
+BChl_A	25
+PsbH	23.7
