@@ -449,7 +449,7 @@ print("")
 # # ****************************** CREATING A HEATMAP-COMPATIBLE CSV FILE *************************************
 # print("Writing heatmap-compatible CSV")
 cats = ["Proteorhodopsin", "Xantharhodopsin", "Heliorhodopsin", "Heliorhodopsin_Pfam", "Bac_rhodopsin",
-        "GpcrRhopsn4", "Htr2", "7tm_1", "ASRT.hmm"]
+        "GpcrRhopsn4", "Htr2", "7tm_1", "ASRT", "Photo_RC", "PsaA_PsaB", "PSII", "PCP", "Chloroa_b-bind", "Bac_chlorC", "BChl_A", "PsbH"]
 
 Dict = defaultdict(lambda: defaultdict(list))
 final = open("%s/%s.csv" % (args.outdir, args.out), "r")
