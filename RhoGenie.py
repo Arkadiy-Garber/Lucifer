@@ -338,6 +338,7 @@ print("\nreading in HMM bitscore cut-offs...")
 for i in bits:
     ls = i.rstrip().split("\t")
     bitDict[ls[0]]["bit"] = ls[1]
+    bitDict[ls[0]]["desc"] = ls[2]
 print("...")
 
 count = 0
@@ -472,7 +473,10 @@ outHeat = open("%s/%s.heatmap.csv" % (args.outdir, args.out), "w")
 outHeat.write("X" + ',')
 for i in sorted(Dict.keys()):
     if (not re.match(r'#', i) and i != "bin"):
-        outHeat.write(i + ",")
+        try:
+            outHeat.write(bitDict[i]["desc"] + ",")
+        except TypeError:
+            outHeat.write("something went wrong here..." + ",")
 outHeat.write("\n")
 
 for i in cats:
