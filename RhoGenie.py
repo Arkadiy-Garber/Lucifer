@@ -173,7 +173,6 @@ def fasta(fasta_file):
         i = i.rstrip()
         if re.match(r'^>', i):
             if len(seq) > 0:
-                print(header)
                 Dict[header] = seq
                 header = i[1:]
                 header = header.split(" ")[0]
@@ -492,9 +491,6 @@ for i in binDirLS:
                                         pass
 
         for key in HMMdict.keys():
-            print("fuck!")
-            print(key)
-            print(fastaFile[key])
             out.write(i + "," + HMMdict[key]["hmm"] + "," + key + "," + HMMdict[key]["evalue"] + "," + HMMdict[key]["bitscore"] + "," + bitDict[HMMdict[key]["hmm"]]["bit"] + "," + fastaFile[key] + "\n")
 
             outTSV.write(i + "\t" + HMMdict[key]["hmm"] + "\t" + key + "\t" + HMMdict[key]["evalue"] + "\t" + HMMdict[key][
