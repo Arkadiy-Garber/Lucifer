@@ -553,8 +553,7 @@ for i in CoordDict.keys():
             if len(RemoveDuplicates(k)) == 1:
                 orf = j + "_" + str(k[0])
 
-                out.write(summaryDict[i][orf]["substrate"] + "\t" + summaryDict[i][orf]["process"] + "\t" +
-                          summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "," + summaryDict[i][orf]["evalue"] +
+                out.write(summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "," + summaryDict[i][orf]["evalue"] +
                           "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
                     summaryDict[i][orf]["bitcut"]) + "\t" +
                           str(summaryDict[i][orf]["sequence"]) + "\t" + str(counter) + "\n")
@@ -563,8 +562,7 @@ for i in CoordDict.keys():
                     "###############################################" + "\n")
                 counter += 1
 
-                outTSV.write(summaryDict[i][orf]["substrate"] + "\t" + summaryDict[i][orf]["process"] + "\t" +
-                          summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "\t" + summaryDict[i][orf]["evalue"] +
+                outTSV.write(summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "\t" + summaryDict[i][orf]["evalue"] +
                           "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
                     summaryDict[i][orf]["bitcut"]) + "\t" +
                           str(summaryDict[i][orf]["sequence"]) + "\t" + str(counter) + "\n")
@@ -575,15 +573,13 @@ for i in CoordDict.keys():
                 for l in RemoveDuplicates(k):
                     orf = j + "_" + str(l)
 
-                    out.write(summaryDict[i][orf]["substrate"] + "," + summaryDict[i][orf]["process"] + "," +
-                              summaryDict[i][orf]["gene"] + "," + i + "," + orf + "," + summaryDict[i][orf][
+                    out.write(summaryDict[i][orf]["gene"] + "," + i + "," + orf + "," + summaryDict[i][orf][
                                   "evalue"] +
                               "," + str(summaryDict[i][orf]["bitscore"]) + "," + str(
                         summaryDict[i][orf]["bitcut"]) +
                               "," + str(summaryDict[i][orf]["sequence"]) + "," + str(counter) + "\n")
 
-                    outTSV.write(summaryDict[i][orf]["substrate"] + "\t" + summaryDict[i][orf]["process"] + "\t" +
-                              summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "\t" + summaryDict[i][orf][
+                    outTSV.write(summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "\t" + summaryDict[i][orf][
                                   "evalue"] +
                               "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
                         summaryDict[i][orf]["bitcut"]) +
