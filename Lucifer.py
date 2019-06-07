@@ -673,7 +673,7 @@ else:
     normDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
     for i in os.listdir(args.bin_dir):
         if lastItem(i.split(".")) == args.bin_ext:
-            file = open("%s/%s" % (args.bin_dir, i), "r")
+            file = open("%s/%s-proteins.faa" % (args.bin_dir, i), "r")
             file = fasta(file)
             normDict[i] = len(file.keys())
 
