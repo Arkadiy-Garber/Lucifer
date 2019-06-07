@@ -298,6 +298,10 @@ parser.add_argument('-bams', type=str, help="a tab-delimeted file with two colum
                                             "(provide full path to the BAM file). BAM files are only required if you would like to create "
                                             "a heatmap that summarizes the abundance of a certain gene that is based on "
                                             "read coverage, rather than gene counts.", default="NA")
+parser.add_argument('--d', type=int, help="maximum distance between genes to be considered in a genomic \'cluster\'."
+                                         "This number should be an integer and should reflect the maximum number of "
+                                         "genes in between putative iron-related genes identified by the HMM database "
+                                         "(default=3)", default=3)
 
 # CHECKING FOR CONDA INSTALL
 os.system("echo ${HMM_dir}/bitscores.txt > HMMlib.txt")
