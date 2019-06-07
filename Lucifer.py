@@ -553,10 +553,10 @@ for i in CoordDict.keys():
             if len(RemoveDuplicates(k)) == 1:
                 orf = j + "_" + str(k[0])
 
-                out.write(summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "," + summaryDict[i][orf]["evalue"] +
-                          "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
-                    summaryDict[i][orf]["bitcut"]) + "\t" +
-                          str(summaryDict[i][orf]["sequence"]) + "\t" + str(counter) + "\n")
+                out.write(summaryDict[i][orf]["gene"] + "," + i + "," + orf + "," + summaryDict[i][orf]["evalue"] +
+                          "," + str(summaryDict[i][orf]["bitscore"]) + "," + str(
+                    summaryDict[i][orf]["bitcut"]) + "," +
+                          str(summaryDict[i][orf]["sequence"]) + "," + str(counter) + "\n")
 
                 out.write(
                     "###############################################" + "\n")
