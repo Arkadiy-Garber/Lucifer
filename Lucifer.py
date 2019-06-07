@@ -633,13 +633,14 @@ if args.bams != "NA":
     final = open("%s/%s-summary.csv" % (args.outdir, args.out), "r")
     for i in final:
         ls = (i.rstrip().split(","))
-        if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome" and not re.match(r'#', i):
-            if not re.match(r'#', i):
-                cell = ls[0]
-                gene = ls[1]
-                orf = ls[2]
-                contig = allButTheLast(orf, "_")
-                Dict[cell][gene].append(float(depthDict[cell][contig]))
+        if not re.match(r'#', i):
+            if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
+                if not re.match(r'#', i):
+                    cell = ls[0]
+                    gene = ls[1]
+                    orf = ls[2]
+                    contig = allButTheLast(orf, "_")
+                    Dict[cell][gene].append(float(depthDict[cell][contig]))
 
 
     outHeat = open("%s/%s.heatmap.csv" % (args.outdir, args.out), "w")
@@ -666,11 +667,12 @@ else:
     final = open("%s/%s-summary.csv" % (args.outdir, args.out), "r")
     for i in final:
         ls = (i.rstrip().split(","))
-        if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome" and not re.match(r'#', i):
-            if not re.match(r'#', i):
-                cell = ls[0]
-                gene = ls[1]
-                Dict[cell][gene].append(gene)
+        if not re.match(r'#', i):
+            if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
+                if not re.match(r'#', i):
+                    cell = ls[0]
+                    gene = ls[1]
+                    Dict[cell][gene].append(gene)
 
     normDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
     for i in os.listdir(args.bin_dir):
