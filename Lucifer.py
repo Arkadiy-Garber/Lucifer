@@ -666,8 +666,8 @@ else:
         if not re.match(r'#', i):
             if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
                 if not re.match(r'#', i):
-                    cell = ls[0]
-                    gene = ls[1]
+                    cell = ls[1]
+                    gene = ls[0]
                     Dict[cell][gene].append(gene)
 
     normDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
