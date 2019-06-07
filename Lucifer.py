@@ -663,7 +663,7 @@ if args.bams != "NA":
     print("Finished!")
 else:
     Dict = defaultdict(lambda: defaultdict(list))
-    final = open("%s/%s.csv" % (args.outdir, args.out), "r")
+    final = open("%s/%s-summary.csv" % (args.outdir, args.out), "r")
     for i in final:
         ls = (i.rstrip().split(","))
         if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
