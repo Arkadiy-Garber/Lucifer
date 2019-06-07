@@ -688,6 +688,7 @@ else:
         outHeat.write(bitDict[i]["desc"] + ",")
         for j in sorted(Dict.keys()):
             if (not re.match(r'#', j) and j != "bin"):
+                print(j)
                 outHeat.write(str((len(Dict[j][i]) / int(normDict[j])) * float(100)) + ",")
         outHeat.write("\n")
 
