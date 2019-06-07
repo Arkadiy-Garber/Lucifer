@@ -281,8 +281,8 @@ parser = argparse.ArgumentParser(
     *******************************************************
     '''))
 
-parser.add_argument('-bin_dir', type=str, help="directory of ORFs in FASTA format")
-parser.add_argument('-bin_ext', type=str, help="extension for files with ORFs")
+parser.add_argument('-bin_dir', type=str, help="directory of genomes or metagenomes in FASTAext txt format")
+parser.add_argument('-bin_ext', type=str, help="filename extension for genomes or metagenomes")
 parser.add_argument('-outdir', type=str, help="output directory (will be created if does not exist)",
                     default="genie_out")
 parser.add_argument('-out', type=str, help="basename of output file (default = out)", default="out")
@@ -415,7 +415,30 @@ for i in binDirLS:
     HMMdict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
     if not re.match(r'^\.', i) and i != (args.out + ".csv") and lastItem(i.split(".")) == args.bin_ext:
         print("")
-        fastaFile = open(args.bin_dir + "/" + i, "r")
+        try:
+            testFile = open("%s/%s-proteins.faa" % (binDir, i), "r")
+            print("")
+            print(".")
+            print("ORFS for %s found. Skipping Prodigal, and going with %s-proteins.faa" % (i, i))
+
+        except FileNotFoundError:
+            print("")
+            print(".")
+            print("Finding ORFs for " + i)
+            if args.contigs_source == "single":
+                os.system("prodigal -i %s/%s -a %s/%s-proteins.faa -o %s/%s-prodigal.out -q" % (
+                binDir, i, binDir, i, binDir, i))
+            elif args.contigs_source == "meta":
+                os.system("prodigal -i %s/%s -a %s/%s-proteins.faa -o %s/%s-prodigal.out -p meta -q" % (
+                binDir, i, binDir, i, binDir, i))
+            else:
+                print("WARNING: you did not specify whether the provided FASTA files are single genomes or "
+                      "metagenome/metatranscriptome assemblies. By default, FeGenie is assuming that these are "
+                      "single genomes, and running Prodigal accordingly. Just an FYI.")
+                os.system("prodigal -i %s%s -a %s%s-proteins.faa -o %s%s-prodigal.out -q" % (
+                binDir, i, binDir, i, binDir, i))
+
+        fastaFile = open(args.bin_dir + "/" + i + "-proteins.faa", "r")
         fastaFile = fasta(fastaFile)
         os.system("mkdir " + args.bin_dir + "/" + i + "-HMM")
         count = 0
@@ -430,7 +453,7 @@ for i in binDirLS:
                               "--tblout " + binDir + "/" + i + "-HMM/" + i + "__" + hmm +
                               " -o " + binDir + "/" + i + "-HMM/" + i + "__" + hmm + ".txt " +
                               HMMdir + "/" + hmm + " " +
-                              binDir + "/" + i)
+                              binDir + "/" + i + "-proteins.faa")
                     os.system("rm " + binDir + "/" + i + "-HMM/" + i + "__" + hmm + ".txt")
 
         HMMresults = os.listdir(args.bin_dir + "/" + i + "-HMM")
@@ -478,9 +501,107 @@ for i in binDirLS:
                     "bitscore"] + "\t" + bitDict[HMMdict[key]["hmm"]]["bit"] + "\t" + fastaFile[key] + "\n")
 
         os.system("rm -r " + args.bin_dir + "/" + i + "-HMM")
+out.close()
+outTSV.close()
+
+
+print(".")
+summaryDict = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: 'EMPTY')))
+summary = open("%s/%s.csv" % (args.outdir, args.out), "r")
+for i in summary:
+    ls = i.rstrip().split(",")
+    if ls != "bin":
+        genome = ls[0]
+        gene = ls[1]
+        process = ls[2]
+        substrate = ls[3]
+        orf = ls[4]
+        evalue = ls[5]
+        bitscore = ls[6]
+        sequence = ls[7]
+        bitcut = bitDict[ls[1]]["bit"]
+        summaryDict[genome][orf]["gene"] = gene
+        summaryDict[genome][orf]["process"] = process
+        summaryDict[genome][orf]["substrate"] = substrate
+        summaryDict[genome][orf]["evalue"] = evalue
+        summaryDict[genome][orf]["bitscore"] = bitscore
+        summaryDict[genome][orf]["sequence"] = sequence
+        summaryDict[genome][orf]["bitcut"] = bitcut
+
+# ****************************** CLUSTERING OF ORFS BASED ON GENOMIC PROXIMITY *************************************
+print(".")
+print("Identifying genomic proximities and putative operons")
+CoordDict = defaultdict(lambda: defaultdict(list))
+for i in summaryDict.keys():
+    if i != "bin":
+        for j in summaryDict[i]:
+            contig = allButTheLast(j, "_")
+            numOrf = lastItem(j.split("_"))
+            CoordDict[i][contig].append(int(numOrf))
+
+counter = 0
+print(".")
+print("Clustering ORFs...")
+print(".")
+out = open("%s/%s-2.csv" % (args.outdir, args.out), "w")
+outTSV = open("%s/%s-2.tsv" % (args.outdir, args.out), "w")
+for i in CoordDict.keys():
+    for j in CoordDict[i]:
+        LS = (CoordDict[i][j])
+        clusters = (cluster(LS, args.d))
+        for k in clusters:
+            if len(RemoveDuplicates(k)) == 1:
+                orf = j + "_" + str(k[0])
+
+                out.write(summaryDict[i][orf]["substrate"] + "\t" + summaryDict[i][orf]["process"] + "\t" +
+                          summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "," + summaryDict[i][orf]["evalue"] +
+                          "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
+                    summaryDict[i][orf]["bitcut"]) + "\t" +
+                          str(summaryDict[i][orf]["sequence"]) + "\t" + str(counter) + "\n")
+
+                out.write(
+                    "###############################################" + "\n")
+                counter += 1
+
+                outTSV.write(summaryDict[i][orf]["substrate"] + "\t" + summaryDict[i][orf]["process"] + "\t" +
+                          summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "\t" + summaryDict[i][orf]["evalue"] +
+                          "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
+                    summaryDict[i][orf]["bitcut"]) + "\t" +
+                          str(summaryDict[i][orf]["sequence"]) + "\t" + str(counter) + "\n")
+
+                outTSV.write("################################################" + "\n")
+
+            else:
+                for l in RemoveDuplicates(k):
+                    orf = j + "_" + str(l)
+
+                    out.write(summaryDict[i][orf]["substrate"] + "," + summaryDict[i][orf]["process"] + "," +
+                              summaryDict[i][orf]["gene"] + "," + i + "," + orf + "," + summaryDict[i][orf][
+                                  "evalue"] +
+                              "," + str(summaryDict[i][orf]["bitscore"]) + "," + str(
+                        summaryDict[i][orf]["bitcut"]) +
+                              "," + str(summaryDict[i][orf]["sequence"]) + "," + str(counter) + "\n")
+
+                    outTSV.write(summaryDict[i][orf]["substrate"] + "\t" + summaryDict[i][orf]["process"] + "\t" +
+                              summaryDict[i][orf]["gene"] + "\t" + i + "\t" + orf + "\t" + summaryDict[i][orf][
+                                  "evalue"] +
+                              "\t" + str(summaryDict[i][orf]["bitscore"]) + "\t" + str(
+                        summaryDict[i][orf]["bitcut"]) +
+                              "\t" + str(summaryDict[i][orf]["sequence"]) + "\t" + str(counter) + "\n")
+
+                out.write(
+                    "################################################" + "\n")
+                counter += 1
+                outTSV.write(
+                    "################################################" + "\n")
+
 
 out.close()
-print("")
+
+os.system("rm %s/%s.csv" % (args.outdir, args.out))
+os.system("rm %s/%s.tsv" % (args.outdir, args.out))
+os.system("mv %s/%s-2.csv %s/%s-summary.csv" % (args.outdir, args.out, args.outdir, args.out))
+os.system("mv %s/%s-2.tsv %s/%s-summary.tsv" % (args.outdir, args.out, args.outdir, args.out))
 
 
 # # ****************************** CREATING A HEATMAP-COMPATIBLE CSV FILE *************************************
@@ -509,7 +630,7 @@ if args.bams != "NA":
                 depthDict[cell][LS[0]] = LS[2]
 
     Dict = defaultdict(lambda: defaultdict(list))
-    final = open("%s/%s.csv" % (args.outdir, args.out), "r")
+    final = open("%s/%s-summary.csv" % (args.outdir, args.out), "r")
     for i in final:
         ls = (i.rstrip().split(","))
         if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
