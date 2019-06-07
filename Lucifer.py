@@ -633,7 +633,7 @@ if args.bams != "NA":
     final = open("%s/%s-summary.csv" % (args.outdir, args.out), "r")
     for i in final:
         ls = (i.rstrip().split(","))
-        if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
+        if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome" and not re.match(r'#', i):
             if not re.match(r'#', i):
                 cell = ls[0]
                 gene = ls[1]
@@ -666,8 +666,7 @@ else:
     final = open("%s/%s-summary.csv" % (args.outdir, args.out), "r")
     for i in final:
         ls = (i.rstrip().split(","))
-        print(ls)
-        if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome":
+        if ls[0] != "" and ls[1] != "assembly" and ls[1] != "genome" and not re.match(r'#', i):
             if not re.match(r'#', i):
                 cell = ls[0]
                 gene = ls[1]
