@@ -287,7 +287,7 @@ parser.add_argument('-outdir', type=str, help="output directory (will be created
                     default="genie_out")
 parser.add_argument('-out', type=str, help="basename of output file (default = out)", default="out")
 parser.add_argument('--makeplots', type=str,
-                    help="Would you like GeoGenie to make some figures from your data? y = yes, n = no (default = n). "
+                    help="Would you like Lucifer to make some figures from your data? y = yes, n = no (default = n). "
                          "If so, you will need to have Rscipt installed. It is a way for R to be called directly from the command line. "
                          "Warning: this part of the program is currently under beta-testing, and if there are any problems running Rscript, "
                          "or installing any of the required packages, you may get a bunch of error messages at the end. "
@@ -360,7 +360,7 @@ if args.makeplots == 'y':
         if args.R != "NA":
             print(".")
         else:
-            print('Looks like you told GeoGenie to automatically generate R plots. '
+            print('Looks like you told Lucifer to automatically generate R plots. '
                   'However, you have not provided the location of the directory that contains the R scripts '
                   '(as required of you because you did not go through the conda-based installation.')
             print("Exiting")
