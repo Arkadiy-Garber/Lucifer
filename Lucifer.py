@@ -281,10 +281,13 @@ parser = argparse.ArgumentParser(
     *******************************************************
     '''))
 
-parser.add_argument('-bin_dir', type=str, help="directory of genomes or metagenomes in FASTAext txt format")
+parser.add_argument('-bin_dir', type=str, help="directory of genomes or metagenomes in FASTA format")
 parser.add_argument('-bin_ext', type=str, help="filename extension for genomes or metagenomes")
 parser.add_argument('-outdir', type=str, help="output directory (will be created if does not exist)",
                     default="genie_out")
+parser.add_argument('-contigs_source', type=str, help="By default Lucifer runs Prodigal to predict protein-coding regions. "
+                                                      "Please specify whether you are providing a directory of genomes "
+                                                      "or metagenomes (default=genomes)", default="genomes")
 parser.add_argument('-out', type=str, help="basename of output file (default = out)", default="out")
 parser.add_argument('--makeplots', type=str,
                     help="Would you like Lucifer to make some figures from your data? y = yes, n = no (default = n). "
@@ -429,10 +432,10 @@ for i in binDirLS:
             print("")
             print(".")
             print("Finding ORFs for " + i)
-            if args.contigs_source == "single":
+            if args.contigs_source == "genomes":
                 os.system("prodigal -i %s/%s -a %s/%s-proteins.faa -o %s/%s-prodigal.out -q" % (
                 binDir, i, binDir, i, binDir, i))
-            elif args.contigs_source == "meta":
+            elif args.contigs_source == "metagenomes":
                 os.system("prodigal -i %s/%s -a %s/%s-proteins.faa -o %s/%s-prodigal.out -p meta -q" % (
                 binDir, i, binDir, i, binDir, i))
             else:
